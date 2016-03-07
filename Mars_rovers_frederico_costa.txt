@@ -1,0 +1,141 @@
+// PROGRAMA QUE FORNECE A POSIÇÃO DOS EXPLORADORES DE MARTE
+
+#include <stdio.h> //biblioteca para funções de entrada e saida de dados
+#include <conio.h> //biblioteca para função getch
+#include <string.h> //biblioteca de funções de string
+
+int mov (int x, int y, char sent, char com[50],int num) { //subrotina que executa os movimentos dos exploradores
+
+    int count; //contador que vai varrer a string de comando
+    int strleng; //tamanho da string de comando
+    int flag; //flag que representa o comando atual de movimento
+    int flag2; //flag que representa a orientação do rover
+    strleng = strlen(com); //variável que recebe tamanho da string de comando
+    
+    for  (count=0 ; count<strleng ; count++) {
+    	
+    	if (com[count]=='L') flag=1;
+    	if (com[count]=='R') flag=2; //conversão de string para um indicador int, pois C++ não aceita switch com strings
+    	if (com[count]=='M') flag=3;
+    	
+    	if (sent=='N') flag2=1;
+		if (sent=='W') flag2=2; //conversão de string para indicador int, com respeito à orientação dos rovers
+		if (sent=='S') flag2=3;
+		if (sent=='E') flag2=4;
+		
+    	switch (flag) { //case que determina movimento atual: L, R ou M
+			
+			case 1:
+				
+				switch (flag2) { //case particular que realiza giro de 90 graus para a esquerda
+
+					case 1: sent= 'W'; break;
+					case 2: sent= 'S'; break;
+					case 3: sent= 'E'; break;
+					case 4: sent= 'N'; break;
+					
+				}
+				
+			break;
+			
+			case 2: 	
+			
+				switch (flag2) { //case particular que realiza giro de 90 graus para a esquerda
+				
+					case 1: sent= 'E'; break;
+					case 2: sent= 'N'; break;
+					case 3: sent= 'W'; break;
+					case 4: sent= 'S'; break;
+
+					
+				}
+			break;
+			
+		    case 3:
+		    	
+				switch (flag2) { //case particular que realiza movimento de 1 espaço (M)
+				
+					case 1: y++; break;
+					case 2: x--; break;
+					case 3: y--; break;
+					case 4: x++; break;
+					
+				}
+			break;
+       }
+   }
+	if (x>5 || x<0 || y>5 || y<0) printf ("\n\nERRO: as coordenadas finais do explorador %d excedem os valores maximos permitidos pela plataforma",num);
+  	else printf ("\n\nO valor das coordenadas finais do explorador %d sao: %d %d %c ",num,x,y,sent);
+
+}
+
+int main () { //função principal
+	
+	int xa, ya; //posição do explorador A
+	int xb, yb; //posição do explorador B
+	char sa; //sentido do explorador A
+	char sb; //sentido do explorador B
+	char com_a[50]; //comando de entrada de A
+	char com_b[50]; //comando de entrada de B
+	int num=1; //número do explorador
+
+	printf("PROGRAMA QUE FORNECE A POSICAO DOS EXPLORADORES DE MARTE"); //sessão de captação de entradas
+	
+	printf("\n\nDigite a coordenada x inicial do primeiro explorador: ");
+	scanf("%d",&xa);
+	while (xa>5 || xa<0) {
+		printf("\nO valor digitado excede o valor maximo permitido pela plataforma (digite um numero de 0 a 5): ");
+		scanf("%d",&xa); }
+	
+	printf("\nDigite a coordenada y inicial do primeiro explorador: ");
+	scanf("%d",&ya);
+	while (ya>5 || ya<0) {
+		printf("\nO valor digitado excede o valor maximo permitido pela plataforma (digite um numero de 0 a 5): ");
+		scanf("%d",&ya); }
+	
+	getchar();
+	printf("\nDigite a orientacao inicial do primeiro explorador (N,S,E ou W): ");
+	scanf("%c",&sa);
+	while (sa!='N' && sa!='E' && sa!='W' && sa!='S') {
+		printf("\nValor de orientacao invalido. Digite um sentido valido (N,S,E ou W): ");
+		getchar();
+		scanf("%c",&sa); }
+	
+	printf("\nDigite o comando de movimentacao para o primeiro explorador (combinar L,R e M): ");
+	scanf("%s",&com_a);
+	
+	printf("\n\nDigite a coordenada x inicial do segundo explorador: ");
+	scanf("%d",&xb);
+	while (xb>5 || xb<0) {
+		printf("\nO valor digitado excede o valor maximo permitido pela plataforma (digite um numero de 0 a 5): ");
+		scanf("%d",&xb); }
+	
+	printf("\nDigite a coordenada y inicial do segundo explorador: ");
+	scanf("%d",&yb);
+	while (yb>5 || yb<0) {
+		printf("\nO valor digitado excede o valor maximo permitido pela plataforma (digite um numero de 0 a 5): ");
+		scanf("%d",&yb); }
+	
+	getchar();
+	printf("\nDigite a orientacao inicial do segundo explorador: ");
+	scanf("%c",&sb);
+	while (sb!='N' && sb!='E' && sb!='W' && sb!='S') {
+		printf("\nValor de orientacao invalido. Digite um sentido valido (N,S,E ou W): ");
+		getchar();
+		scanf("%c",&sb); }
+	
+	printf("\nDigite o comando de movimentacao para o segundo explorador (combinar L,R e M): ");
+	scanf("%s",&com_b);
+	
+	printf ("\nRESULTADO FINAL");
+			
+	mov (xa,ya,sa,com_a,num); //chamada da função mov para o primeiro explorador
+	num++;
+	mov (xb,yb,sb,com_b,num); //chamada da função mov para o segundo explorador
+	
+	printf ("\n\nPressione qualquer tecla para finalizar.");
+	
+	getch ();
+	return 0;
+	
+	}
